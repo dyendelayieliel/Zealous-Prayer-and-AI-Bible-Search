@@ -2,69 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* Zealous Design System - Black & White Spiritual Theme */
+/* Zealous Design System - iOS-Style Black & White Theme */
 
 @layer base {
   :root {
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 
-    --card: 0 0% 5%;
+    --card: 0 0% 10%;
     --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 5%;
+    --popover: 0 0% 10%;
     --popover-foreground: 0 0% 100%;
 
     --primary: 0 0% 100%;
     --primary-foreground: 0 0% 0%;
 
-    --secondary: 0 0% 10%;
+    --secondary: 0 0% 18%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 0 0% 20%;
+    --accent: 0 0% 22%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 20%;
+    --border: 0 0% 25%;
     --input: 0 0% 15%;
     --ring: 0 0% 100%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
-    /* Custom Zealous tokens */
-    --glow: 0 0% 100%;
-    --glow-intensity: 0.15;
+    /* iOS-style tokens */
+    --ios-card: 0 0% 12%;
+    --ios-separator: 0 0% 20%;
+    --ios-grouped-bg: 0 0% 5%;
 
     /* Typography */
-    --font-display: 'Playfair Display', serif;
-    --font-body: 'Inter', sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
   }
 
   .dark {
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
-    --card: 0 0% 5%;
+    --card: 0 0% 10%;
     --card-foreground: 0 0% 100%;
-    --popover: 0 0% 5%;
+    --popover: 0 0% 10%;
     --popover-foreground: 0 0% 100%;
     --primary: 0 0% 100%;
     --primary-foreground: 0 0% 0%;
-    --secondary: 0 0% 10%;
+    --secondary: 0 0% 18%;
     --secondary-foreground: 0 0% 100%;
     --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
-    --accent: 0 0% 20%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 0 0% 22%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 20%;
+    --border: 0 0% 25%;
     --input: 0 0% 15%;
     --ring: 0 0% 100%;
   }
@@ -76,43 +76,109 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     font-family: var(--font-body);
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
 @layer components {
-  .text-glow {
-    text-shadow: 0 0 20px hsl(var(--glow) / var(--glow-intensity)),
-                 0 0 40px hsl(var(--glow) / calc(var(--glow-intensity) * 0.5));
+  /* iOS-style cards */
+  .ios-card {
+    @apply rounded-2xl bg-card;
   }
 
-  .box-glow {
-    box-shadow: 0 0 30px hsl(var(--glow) / var(--glow-intensity)),
-                0 0 60px hsl(var(--glow) / calc(var(--glow-intensity) * 0.3));
+  .ios-card-grouped {
+    @apply rounded-xl bg-card overflow-hidden;
   }
 
-  .border-glow {
-    box-shadow: inset 0 0 20px hsl(var(--glow) / 0.05),
-                0 0 20px hsl(var(--glow) / 0.1);
+  /* iOS-style list items */
+  .ios-list-item {
+    @apply px-4 py-3 flex items-center justify-between border-b border-border last:border-b-0;
+  }
+
+  /* iOS-style buttons */
+  .ios-button {
+    @apply px-6 py-3 rounded-xl font-medium transition-all active:scale-95;
+  }
+
+  .ios-button-primary {
+    @apply ios-button bg-primary text-primary-foreground;
+  }
+
+  .ios-button-secondary {
+    @apply ios-button bg-secondary text-secondary-foreground;
+  }
+
+  /* iOS-style input */
+  .ios-input {
+    @apply w-full bg-input rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30 transition-all;
+  }
+
+  .ios-textarea {
+    @apply w-full bg-input rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30 transition-all resize-none;
+  }
+
+  /* iOS-style segmented control */
+  .ios-segment {
+    @apply flex bg-secondary rounded-xl p-1;
+  }
+
+  .ios-segment-button {
+    @apply flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all;
+  }
+
+  .ios-segment-button-active {
+    @apply bg-card text-foreground shadow-sm;
+  }
+
+  .ios-segment-button-inactive {
+    @apply text-muted-foreground;
+  }
+
+  /* iOS-style navigation */
+  .ios-nav-title {
+    @apply text-lg font-semibold;
+  }
+
+  .ios-large-title {
+    @apply text-3xl font-bold tracking-tight;
+  }
+
+  /* iOS tab bar */
+  .ios-tab-bar {
+    @apply fixed bottom-0 left-0 right-0 bg-card/90 backdrop-blur-xl border-t border-border safe-area-inset-bottom;
+  }
+
+  .ios-tab-item {
+    @apply flex flex-col items-center py-2 px-4 transition-colors;
+  }
+
+  .ios-tab-item-active {
+    @apply text-foreground;
+  }
+
+  .ios-tab-item-inactive {
+    @apply text-muted-foreground;
   }
 }
 
 @layer utilities {
   .animate-fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
+    animation: fadeIn 0.3s ease-out forwards;
   }
 
-  .animate-fade-in-up {
-    animation: fadeInUp 0.6s ease-out forwards;
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out forwards;
   }
 
-  .animate-pulse-subtle {
-    animation: pulseSlow 4s ease-in-out infinite;
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out forwards;
+  }
+
+  .safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   @keyframes fadeIn {
@@ -120,7 +186,7 @@
     to { opacity: 1; }
   }
 
-  @keyframes fadeInUp {
+  @keyframes slideUp {
     from { 
       opacity: 0; 
       transform: translateY(20px);
@@ -131,8 +197,14 @@
     }
   }
 
-  @keyframes pulseSlow {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+  @keyframes scaleIn {
+    from { 
+      opacity: 0; 
+      transform: scale(0.95);
+    }
+    to { 
+      opacity: 1; 
+      transform: scale(1);
+    }
   }
 }
