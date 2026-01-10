@@ -41,207 +41,207 @@ export const moods: Mood[] = [
 export const verses: Verse[] = [
   // Anxious
   {
-    reference: 'Philippians 4:6-7',
-    text: 'Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus.',
+    reference: 'Philippians 4:6-7 (NLT)',
+    text: "Don't worry about anything; instead, pray about everything. Tell God what you need, and thank him for all he has done. Then you will experience God's peace, which exceeds anything we can understand. His peace will guard your hearts and minds as you live in Christ Jesus.",
     moodIds: ['anxious', 'overwhelmed'],
   },
   {
-    reference: '1 Peter 5:7',
-    text: 'Cast all your anxiety on him because he cares for you.',
+    reference: '1 Peter 5:7 (NLT)',
+    text: 'Give all your worries and cares to God, for he cares about you.',
     moodIds: ['anxious', 'fearful'],
   },
   {
-    reference: 'Matthew 6:34',
-    text: 'Therefore do not worry about tomorrow, for tomorrow will worry about itself. Each day has enough trouble of its own.',
+    reference: 'Matthew 6:34 (NLT)',
+    text: "So don't worry about tomorrow, for tomorrow will bring its own worries. Today's trouble is enough for today.",
     moodIds: ['anxious', 'overwhelmed'],
   },
   
   // Sad
   {
-    reference: 'Psalm 34:18',
-    text: 'The Lord is close to the brokenhearted and saves those who are crushed in spirit.',
+    reference: 'Psalm 34:18 (NLT)',
+    text: 'The Lord is close to the brokenhearted; he rescues those whose spirits are crushed.',
     moodIds: ['sad', 'lonely'],
   },
   {
-    reference: 'Revelation 21:4',
-    text: 'He will wipe every tear from their eyes. There will be no more death or mourning or crying or pain, for the old order of things has passed away.',
+    reference: 'Revelation 21:4 (NLT)',
+    text: 'He will wipe every tear from their eyes, and there will be no more death or sorrow or crying or pain. All these things are gone forever.',
     moodIds: ['sad', 'in-pain'],
   },
   {
-    reference: 'Psalm 30:5',
-    text: 'Weeping may stay for the night, but rejoicing comes in the morning.',
+    reference: 'Psalm 30:5 (NLT)',
+    text: 'Weeping may last through the night, but joy comes with the morning.',
     moodIds: ['sad', 'hopeful'],
   },
   
   // Angry
   {
-    reference: 'James 1:19-20',
-    text: 'My dear brothers and sisters, take note of this: Everyone should be quick to listen, slow to speak and slow to become angry, because human anger does not produce the righteousness that God desires.',
+    reference: 'James 1:19-20 (NLT)',
+    text: "Understand this, my dear brothers and sisters: You must all be quick to listen, slow to speak, and slow to get angry. Human anger does not produce the righteousness God desires.",
     moodIds: ['angry'],
   },
   {
-    reference: 'Ephesians 4:26-27',
-    text: 'In your anger do not sin: Do not let the sun go down while you are still angry, and do not give the devil a foothold.',
+    reference: 'Ephesians 4:26-27 (NLT)',
+    text: "And don't sin by letting anger control you. Don't let the sun go down while you are still angry, for anger gives a foothold to the devil.",
     moodIds: ['angry'],
   },
   
   // Lonely
   {
-    reference: 'Deuteronomy 31:6',
-    text: 'Be strong and courageous. Do not be afraid or terrified because of them, for the Lord your God goes with you; he will never leave you nor forsake you.',
+    reference: 'Deuteronomy 31:6 (NLT)',
+    text: 'So be strong and courageous! Do not be afraid and do not panic before them. For the Lord your God will personally go ahead of you. He will neither fail you nor abandon you.',
     moodIds: ['lonely', 'fearful'],
   },
   {
-    reference: 'Psalm 23:4',
-    text: 'Even though I walk through the darkest valley, I will fear no evil, for you are with me; your rod and your staff, they comfort me.',
+    reference: 'Psalm 23:4 (NLT)',
+    text: 'Even when I walk through the darkest valley, I will not be afraid, for you are close beside me. Your rod and your staff protect and comfort me.',
     moodIds: ['lonely', 'fearful'],
   },
   
   // Fearful
   {
-    reference: 'Isaiah 41:10',
-    text: 'So do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand.',
+    reference: 'Isaiah 41:10 (NLT)',
+    text: "Don't be afraid, for I am with you. Don't be discouraged, for I am your God. I will strengthen you and help you. I will hold you up with my victorious right hand.",
     moodIds: ['fearful', 'weak'],
   },
   {
-    reference: '2 Timothy 1:7',
-    text: 'For the Spirit God gave us does not make us timid, but gives us power, love and self-discipline.',
+    reference: '2 Timothy 1:7 (NLT)',
+    text: 'For God has not given us a spirit of fear and timidity, but of power, love, and self-discipline.',
     moodIds: ['fearful', 'weak'],
   },
   
   // Grateful
   {
-    reference: '1 Thessalonians 5:18',
-    text: "Give thanks in all circumstances; for this is God's will for you in Christ Jesus.",
+    reference: '1 Thessalonians 5:18 (NLT)',
+    text: "Be thankful in all circumstances, for this is God's will for you who belong to Christ Jesus.",
     moodIds: ['grateful', 'hopeful'],
   },
   {
-    reference: 'Psalm 107:1',
-    text: 'Give thanks to the Lord, for he is good; his love endures forever.',
+    reference: 'Psalm 107:1 (NLT)',
+    text: 'Give thanks to the Lord, for he is good! His faithful love endures forever.',
     moodIds: ['grateful'],
   },
   
   // Hopeful
   {
-    reference: 'Jeremiah 29:11',
-    text: 'For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.',
+    reference: 'Jeremiah 29:11 (NLT)',
+    text: '"For I know the plans I have for you," says the Lord. "They are plans for good and not for disaster, to give you a future and a hope."',
     moodIds: ['hopeful', 'discouraged'],
   },
   {
-    reference: 'Romans 15:13',
-    text: 'May the God of hope fill you with all joy and peace as you trust in him, so that you may overflow with hope by the power of the Holy Spirit.',
+    reference: 'Romans 15:13 (NLT)',
+    text: 'I pray that God, the source of hope, will fill you completely with joy and peace because you trust in him. Then you will overflow with confident hope through the power of the Holy Spirit.',
     moodIds: ['hopeful'],
   },
   
   // Tired
   {
-    reference: 'Matthew 11:28-30',
-    text: 'Come to me, all you who are weary and burdened, and I will give you rest. Take my yoke upon you and learn from me, for I am gentle and humble in heart, and you will find rest for your souls.',
+    reference: 'Matthew 11:28-30 (NLT)',
+    text: 'Then Jesus said, "Come to me, all of you who are weary and carry heavy burdens, and I will give you rest. Take my yoke upon you. Let me teach you, because I am humble and gentle at heart, and you will find rest for your souls."',
     moodIds: ['tired', 'overwhelmed'],
   },
   {
-    reference: 'Isaiah 40:31',
-    text: 'But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.',
+    reference: 'Isaiah 40:31 (NLT)',
+    text: 'But those who trust in the Lord will find new strength. They will soar high on wings like eagles. They will run and not grow weary. They will walk and not faint.',
     moodIds: ['tired', 'weak'],
   },
   
   // Sick
   {
-    reference: 'James 5:15',
-    text: 'And the prayer offered in faith will make the sick person well; the Lord will raise them up.',
+    reference: 'James 5:15 (NLT)',
+    text: 'Such a prayer offered in faith will heal the sick, and the Lord will make you well. And if you have committed any sins, you will be forgiven.',
     moodIds: ['sick', 'in-pain'],
   },
   {
-    reference: 'Psalm 103:2-3',
-    text: 'Praise the Lord, my soul, and forget not all his benefits—who forgives all your sins and heals all your diseases.',
+    reference: 'Psalm 103:2-3 (NLT)',
+    text: 'Let all that I am praise the Lord; may I never forget the good things he does for me. He forgives all my sins and heals all my diseases.',
     moodIds: ['sick'],
   },
   
   // Restless
   {
-    reference: 'Psalm 46:10',
-    text: 'Be still, and know that I am God; I will be exalted among the nations, I will be exalted in the earth.',
+    reference: 'Psalm 46:10 (NLT)',
+    text: '"Be still, and know that I am God! I will be honored by every nation. I will be honored throughout the world."',
     moodIds: ['restless', 'anxious'],
   },
   
   // Weak
   {
-    reference: '2 Corinthians 12:9',
-    text: "But he said to me, \"My grace is sufficient for you, for my power is made perfect in weakness.\" Therefore I will boast all the more gladly about my weaknesses, so that Christ's power may rest on me.",
+    reference: '2 Corinthians 12:9 (NLT)',
+    text: 'Each time he said, "My grace is all you need. My power works best in weakness." So now I am glad to boast about my weaknesses, so that the power of Christ can work through me.',
     moodIds: ['weak', 'discouraged'],
   },
   
   // In Pain
   {
-    reference: 'Psalm 147:3',
-    text: 'He heals the brokenhearted and binds up their wounds.',
+    reference: 'Psalm 147:3 (NLT)',
+    text: 'He heals the brokenhearted and bandages their wounds.',
     moodIds: ['in-pain', 'sad'],
   },
   
   // Confused
   {
-    reference: 'Proverbs 3:5-6',
-    text: 'Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.',
+    reference: 'Proverbs 3:5-6 (NLT)',
+    text: 'Trust in the Lord with all your heart; do not depend on your own understanding. Seek his will in all you do, and he will show you which path to take.',
     moodIds: ['confused', 'doubtful'],
   },
   {
-    reference: 'James 1:5',
-    text: 'If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you.',
+    reference: 'James 1:5 (NLT)',
+    text: 'If you need wisdom, ask our generous God, and he will give it to you. He will not rebuke you for asking.',
     moodIds: ['confused', 'seeking-wisdom'],
   },
   
   // Overwhelmed
   {
-    reference: 'Psalm 61:2',
-    text: 'From the ends of the earth I call to you, I call as my heart grows faint; lead me to the rock that is higher than I.',
+    reference: 'Psalm 61:2 (NLT)',
+    text: 'From the ends of the earth, I cry to you for help when my heart is overwhelmed. Lead me to the towering rock of safety.',
     moodIds: ['overwhelmed'],
   },
   
   // Doubtful
   {
-    reference: 'Mark 9:24',
-    text: "Immediately the boy's father exclaimed, \"I do believe; help me overcome my unbelief!\"",
+    reference: 'Mark 9:24 (NLT)',
+    text: 'The father instantly cried out, "I do believe, but help me overcome my unbelief!"',
     moodIds: ['doubtful'],
   },
   {
-    reference: 'Hebrews 11:1',
-    text: 'Now faith is confidence in what we hope for and assurance about what we not see.',
+    reference: 'Hebrews 11:1 (NLT)',
+    text: 'Faith shows the reality of what we hope for; it is the evidence of things we cannot see.',
     moodIds: ['doubtful', 'hopeful'],
   },
   
   // Unfocused
   {
-    reference: 'Colossians 3:2',
-    text: 'Set your minds on things above, not on earthly things.',
+    reference: 'Colossians 3:2 (NLT)',
+    text: 'Think about the things of heaven, not the things of earth.',
     moodIds: ['unfocused'],
   },
   {
-    reference: 'Philippians 4:8',
-    text: 'Finally, brothers and sisters, whatever is true, whatever is noble, whatever is right, whatever is pure, whatever is lovely, whatever is admirable—if anything is excellent or praiseworthy—think about such things.',
+    reference: 'Philippians 4:8 (NLT)',
+    text: 'And now, dear brothers and sisters, one final thing. Fix your thoughts on what is true, and honorable, and right, and pure, and lovely, and admirable. Think about things that are excellent and worthy of praise.',
     moodIds: ['unfocused', 'anxious'],
   },
   
   // Discouraged
   {
-    reference: 'Joshua 1:9',
-    text: 'Have I not commanded you? Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.',
+    reference: 'Joshua 1:9 (NLT)',
+    text: "This is my command—be strong and courageous! Do not be afraid or discouraged. For the Lord your God is with you wherever you go.",
     moodIds: ['discouraged', 'fearful'],
   },
   {
-    reference: 'Galatians 6:9',
-    text: 'Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up.',
+    reference: 'Galatians 6:9 (NLT)',
+    text: "So let's not get tired of doing what is good. At just the right time we will reap a harvest of blessing if we don't give up.",
     moodIds: ['discouraged', 'tired'],
   },
   
   // Seeking Wisdom
   {
-    reference: 'Proverbs 2:6',
-    text: 'For the Lord gives wisdom; from his mouth come knowledge and understanding.',
+    reference: 'Proverbs 2:6 (NLT)',
+    text: 'For the Lord grants wisdom! From his mouth come knowledge and understanding.',
     moodIds: ['seeking-wisdom'],
   },
   {
-    reference: 'Psalm 119:105',
-    text: 'Your word is a lamp for my feet, a light on my path.',
+    reference: 'Psalm 119:105 (NLT)',
+    text: 'Your word is a lamp to guide my feet and a light for my path.',
     moodIds: ['seeking-wisdom', 'confused'],
   },
 ];
