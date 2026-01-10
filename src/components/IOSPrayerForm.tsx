@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Send, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 export function IOSPrayerForm() {
   const [name, setName] = useState('');
@@ -19,13 +20,29 @@ export function IOSPrayerForm() {
 
     setIsSubmitting(true);
     
-    // For now, we'll show a success message
-    // The actual email sending will require Cloud to be enabled
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const { data, error } = await supabase.functions.invoke('send-prayer-request', {
+        body: {
+          name: name.trim(),
+          email: email.trim(),
+          prayerRequest: request.trim(),
+        },
+      });
+
+      if (error) {
+        console.error('Error sending prayer request:', error);
+        toast.error('Failed to send prayer request. Please try again.');
+        return;
+      }
+
       setIsSubmitted(true);
-      toast.success('Your prayer request has been received');
-    }, 1000);
+      toast.success('Your prayer request has been sent');
+    } catch (err) {
+      console.error('Error:', err);
+      toast.error('Failed to send prayer request. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSubmitted) {
