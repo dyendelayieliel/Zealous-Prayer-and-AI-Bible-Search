@@ -6,26 +6,26 @@ interface FreeTextInputProps {
   onVersesFound: (verses: Verse[], userInput: string) => void;
 }
 
-// Keyword mappings to moods
+// Keyword mappings to moods - including life stages and problems
 const keywordMappings: Record<string, string[]> = {
-  anxious: ['anxious', 'anxiety', 'worried', 'worry', 'nervous', 'stress', 'stressed', 'panic', 'uneasy'],
-  sad: ['sad', 'depressed', 'down', 'unhappy', 'crying', 'tears', 'grief', 'mourning', 'heartbroken', 'sorrow'],
-  angry: ['angry', 'mad', 'furious', 'frustrated', 'annoyed', 'irritated', 'rage', 'upset'],
-  lonely: ['lonely', 'alone', 'isolated', 'abandoned', 'forgotten', 'no one', 'nobody'],
-  fearful: ['afraid', 'fear', 'scared', 'terrified', 'frightened', 'dread', 'terror'],
-  grateful: ['grateful', 'thankful', 'blessed', 'appreciate', 'gratitude'],
-  hopeful: ['hopeful', 'hope', 'optimistic', 'looking forward', 'excited'],
-  tired: ['tired', 'exhausted', 'weary', 'drained', 'burnt out', 'burnout', 'fatigued', 'sleepy'],
-  sick: ['sick', 'ill', 'unwell', 'disease', 'health', 'healing'],
-  restless: ['restless', 'cant sleep', "can't sleep", 'insomnia', 'agitated'],
-  weak: ['weak', 'powerless', 'helpless', 'feeble', 'frail'],
-  'in-pain': ['pain', 'hurting', 'suffering', 'ache', 'hurt'],
-  confused: ['confused', 'lost', 'uncertain', 'unsure', "don't know", 'dont know', 'direction'],
-  overwhelmed: ['overwhelmed', 'too much', 'cant handle', "can't handle", 'drowning', 'swamped'],
-  doubtful: ['doubt', 'doubtful', 'questioning', 'unsure', 'faith', 'believe'],
-  unfocused: ['unfocused', 'distracted', 'cant focus', "can't focus", 'scattered', 'mind wandering'],
-  discouraged: ['discouraged', 'giving up', 'hopeless', 'defeated', 'failed', 'failure'],
-  'seeking-wisdom': ['wisdom', 'guidance', 'direction', 'decision', 'advice', 'what should i do'],
+  anxious: ['anxious', 'anxiety', 'worried', 'worry', 'nervous', 'stress', 'stressed', 'panic', 'uneasy', 'interview', 'exam', 'test', 'deadline'],
+  sad: ['sad', 'depressed', 'down', 'unhappy', 'crying', 'tears', 'grief', 'mourning', 'heartbroken', 'sorrow', 'breakup', 'divorce', 'loss', 'death', 'passed away', 'funeral'],
+  angry: ['angry', 'mad', 'furious', 'frustrated', 'annoyed', 'irritated', 'rage', 'upset', 'betrayed', 'cheated', 'lied to', 'unfair'],
+  lonely: ['lonely', 'alone', 'isolated', 'abandoned', 'forgotten', 'no one', 'nobody', 'single', 'moved away', 'new city', 'new job', 'no friends', 'left out'],
+  fearful: ['afraid', 'fear', 'scared', 'terrified', 'frightened', 'dread', 'terror', 'surgery', 'diagnosis', 'results', 'unknown future'],
+  grateful: ['grateful', 'thankful', 'blessed', 'appreciate', 'gratitude', 'promotion', 'got the job', 'engaged', 'married', 'baby', 'pregnant', 'recovered'],
+  hopeful: ['hopeful', 'hope', 'optimistic', 'looking forward', 'excited', 'new chapter', 'fresh start', 'new beginning', 'opportunity'],
+  tired: ['tired', 'exhausted', 'weary', 'drained', 'burnt out', 'burnout', 'fatigued', 'sleepy', 'overworked', 'too busy', 'no rest', 'parenting', 'newborn', 'caregiver'],
+  sick: ['sick', 'ill', 'unwell', 'disease', 'health', 'healing', 'cancer', 'chronic', 'hospital', 'treatment', 'recovery'],
+  restless: ['restless', 'cant sleep', "can't sleep", 'insomnia', 'agitated', 'racing thoughts', 'overthinking'],
+  weak: ['weak', 'powerless', 'helpless', 'feeble', 'frail', 'addiction', 'temptation', 'struggling', 'relapse'],
+  'in-pain': ['pain', 'hurting', 'suffering', 'ache', 'hurt', 'trauma', 'abuse', 'wounded'],
+  confused: ['confused', 'lost', 'uncertain', 'unsure', "don't know", 'dont know', 'direction', 'career', 'calling', 'purpose', 'quarter-life', 'midlife', 'transition', 'crossroads', 'which path', 'what to do'],
+  overwhelmed: ['overwhelmed', 'too much', 'cant handle', "can't handle", 'drowning', 'swamped', 'college', 'university', 'finals', 'bills', 'debt', 'financial', 'money problems'],
+  doubtful: ['doubt', 'doubtful', 'questioning', 'unsure', 'faith', 'believe', 'crisis', 'losing faith', 'why god'],
+  unfocused: ['unfocused', 'distracted', 'cant focus', "can't focus", 'scattered', 'mind wandering', 'procrastinating', 'unmotivated'],
+  discouraged: ['discouraged', 'giving up', 'hopeless', 'defeated', 'failed', 'failure', 'rejected', 'fired', 'laid off', 'unemployed', 'job loss', 'denied', 'didn\'t get', 'not good enough'],
+  'seeking-wisdom': ['wisdom', 'guidance', 'direction', 'decision', 'advice', 'what should i do', 'marriage', 'relationship', 'job offer', 'moving', 'college choice', 'big decision', 'retire', 'retirement', 'starting family', 'having kids'],
 };
 
 function findRelevantMoods(text: string): string[] {
@@ -54,21 +54,21 @@ function getVersesForMoods(moodIds: string[]): Verse[] {
     .slice(0, 3);
 }
 
-// Default encouraging verses when no keywords match
+// Default encouraging verses when no keywords match (NLT)
 const defaultVerses: Verse[] = [
   {
-    reference: 'Romans 8:28',
-    text: 'And we know that in all things God works for the good of those who love him, who have been called according to his purpose.',
+    reference: 'Romans 8:28 (NLT)',
+    text: 'And we know that God causes everything to work together for the good of those who love God and are called according to his purpose for them.',
     moodIds: [],
   },
   {
-    reference: 'Psalm 46:1',
-    text: 'God is our refuge and strength, an ever-present help in trouble.',
+    reference: 'Psalm 46:1 (NLT)',
+    text: 'God is our refuge and strength, always ready to help in times of trouble.',
     moodIds: [],
   },
   {
-    reference: 'Isaiah 40:31',
-    text: 'But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.',
+    reference: 'Isaiah 40:31 (NLT)',
+    text: 'But those who trust in the Lord will find new strength. They will soar high on wings like eagles. They will run and not grow weary. They will walk and not faint.',
     moodIds: [],
   },
 ];
@@ -99,10 +99,12 @@ export function FreeTextInput({ onVersesFound }: FreeTextInputProps) {
   };
 
   const placeholders = [
-    "I'm feeling anxious about tomorrow...",
-    "I feel lost and don't know what to do...",
-    "I'm grateful for everything today...",
-    "I'm tired and need strength...",
+    "I'm a college student feeling overwhelmed with finals...",
+    "I just got married and I'm anxious about the future...",
+    "I lost my job and don't know what to do next...",
+    "I'm a new parent and feeling exhausted...",
+    "I'm going through a divorce and feel lost...",
+    "I'm retiring soon and seeking direction...",
   ];
 
   const [placeholder] = useState(
@@ -115,7 +117,7 @@ export function FreeTextInput({ onVersesFound }: FreeTextInputProps) {
         <div className="flex items-start gap-3 mb-3">
           <Sparkles className="w-5 h-5 text-muted-foreground mt-1 flex-shrink-0" />
           <p className="text-sm text-muted-foreground">
-            Tell us how you're feeling in your own words, and we'll find Scripture that speaks to your heart.
+            Share what you're going through—your feelings, life stage, or challenges—and we'll find Scripture that speaks to your situation.
           </p>
         </div>
 
