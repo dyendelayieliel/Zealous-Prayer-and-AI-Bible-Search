@@ -6,26 +6,26 @@ interface FreeTextInputProps {
   onVersesFound: (verses: Verse[], userInput: string) => void;
 }
 
-// Keyword mappings to moods - including life stages and problems
+// Keyword mappings to moods - including life stages, problems, struggles, and sins
 const keywordMappings: Record<string, string[]> = {
   anxious: ['anxious', 'anxiety', 'worried', 'worry', 'nervous', 'stress', 'stressed', 'panic', 'uneasy', 'interview', 'exam', 'test', 'deadline'],
   sad: ['sad', 'depressed', 'down', 'unhappy', 'crying', 'tears', 'grief', 'mourning', 'heartbroken', 'sorrow', 'breakup', 'divorce', 'loss', 'death', 'passed away', 'funeral'],
-  angry: ['angry', 'mad', 'furious', 'frustrated', 'annoyed', 'irritated', 'rage', 'upset', 'betrayed', 'cheated', 'lied to', 'unfair'],
+  angry: ['angry', 'mad', 'furious', 'frustrated', 'annoyed', 'irritated', 'rage', 'upset', 'betrayed', 'cheated', 'lied to', 'unfair', 'bitterness', 'bitter', 'resentment', 'resentful', 'hatred', 'hate', 'unforgiving', 'grudge', 'revenge', 'vengeance'],
   lonely: ['lonely', 'alone', 'isolated', 'abandoned', 'forgotten', 'no one', 'nobody', 'single', 'moved away', 'new city', 'new job', 'no friends', 'left out'],
-  fearful: ['afraid', 'fear', 'scared', 'terrified', 'frightened', 'dread', 'terror', 'surgery', 'diagnosis', 'results', 'unknown future'],
+  fearful: ['afraid', 'fear', 'scared', 'terrified', 'frightened', 'dread', 'terror', 'surgery', 'diagnosis', 'results', 'unknown future', 'cowardice', 'coward'],
   grateful: ['grateful', 'thankful', 'blessed', 'appreciate', 'gratitude', 'promotion', 'got the job', 'engaged', 'married', 'baby', 'pregnant', 'recovered'],
-  hopeful: ['hopeful', 'hope', 'optimistic', 'looking forward', 'excited', 'new chapter', 'fresh start', 'new beginning', 'opportunity'],
-  tired: ['tired', 'exhausted', 'weary', 'drained', 'burnt out', 'burnout', 'fatigued', 'sleepy', 'overworked', 'too busy', 'no rest', 'parenting', 'newborn', 'caregiver'],
+  hopeful: ['hopeful', 'hope', 'optimistic', 'looking forward', 'excited', 'new chapter', 'fresh start', 'new beginning', 'opportunity', 'repentance', 'repent', 'turning back', 'returning to god'],
+  tired: ['tired', 'exhausted', 'weary', 'drained', 'burnt out', 'burnout', 'fatigued', 'sleepy', 'overworked', 'too busy', 'no rest', 'parenting', 'newborn', 'caregiver', 'sloth', 'lazy', 'laziness'],
   sick: ['sick', 'ill', 'unwell', 'disease', 'health', 'healing', 'cancer', 'chronic', 'hospital', 'treatment', 'recovery'],
-  restless: ['restless', 'cant sleep', "can't sleep", 'insomnia', 'agitated', 'racing thoughts', 'overthinking'],
-  weak: ['weak', 'powerless', 'helpless', 'feeble', 'frail', 'addiction', 'temptation', 'struggling', 'relapse'],
-  'in-pain': ['pain', 'hurting', 'suffering', 'ache', 'hurt', 'trauma', 'abuse', 'wounded'],
-  confused: ['confused', 'lost', 'uncertain', 'unsure', "don't know", 'dont know', 'direction', 'career', 'calling', 'purpose', 'quarter-life', 'midlife', 'transition', 'crossroads', 'which path', 'what to do'],
-  overwhelmed: ['overwhelmed', 'too much', 'cant handle', "can't handle", 'drowning', 'swamped', 'college', 'university', 'finals', 'bills', 'debt', 'financial', 'money problems'],
-  doubtful: ['doubt', 'doubtful', 'questioning', 'unsure', 'faith', 'believe', 'crisis', 'losing faith', 'why god'],
-  unfocused: ['unfocused', 'distracted', 'cant focus', "can't focus", 'scattered', 'mind wandering', 'procrastinating', 'unmotivated'],
-  discouraged: ['discouraged', 'giving up', 'hopeless', 'defeated', 'failed', 'failure', 'rejected', 'fired', 'laid off', 'unemployed', 'job loss', 'denied', 'didn\'t get', 'not good enough'],
-  'seeking-wisdom': ['wisdom', 'guidance', 'direction', 'decision', 'advice', 'what should i do', 'marriage', 'relationship', 'job offer', 'moving', 'college choice', 'big decision', 'retire', 'retirement', 'starting family', 'having kids'],
+  restless: ['restless', 'cant sleep', "can't sleep", 'insomnia', 'agitated', 'racing thoughts', 'overthinking', 'guilt', 'guilty', 'shame', 'ashamed', 'regret', 'conscience'],
+  weak: ['weak', 'powerless', 'helpless', 'feeble', 'frail', 'addiction', 'temptation', 'struggling', 'relapse', 'lust', 'lustful', 'pornography', 'porn', 'sexual sin', 'sexual immorality', 'adultery', 'affair', 'unfaithful', 'drinking', 'alcohol', 'drugs', 'substance', 'gambling', 'smoking', 'self-control', 'no self control'],
+  'in-pain': ['pain', 'hurting', 'suffering', 'ache', 'hurt', 'trauma', 'abuse', 'wounded', 'self-harm', 'cutting', 'suicidal', 'suicide'],
+  confused: ['confused', 'lost', 'uncertain', 'unsure', "don't know", 'dont know', 'direction', 'career', 'calling', 'purpose', 'quarter-life', 'midlife', 'transition', 'crossroads', 'which path', 'what to do', 'deception', 'deceived', 'false teaching'],
+  overwhelmed: ['overwhelmed', 'too much', 'cant handle', "can't handle", 'drowning', 'swamped', 'college', 'university', 'finals', 'bills', 'debt', 'financial', 'money problems', 'greed', 'greedy', 'materialism', 'love of money', 'covet', 'coveting', 'envy', 'envious', 'jealous', 'jealousy'],
+  doubtful: ['doubt', 'doubtful', 'questioning', 'unsure', 'faith', 'believe', 'crisis', 'losing faith', 'why god', 'unbelief', 'lack of faith', 'skeptical'],
+  unfocused: ['unfocused', 'distracted', 'cant focus', "can't focus", 'scattered', 'mind wandering', 'procrastinating', 'unmotivated', 'idolatry', 'idol', 'priorities', 'worldly', 'worldliness'],
+  discouraged: ['discouraged', 'giving up', 'hopeless', 'defeated', 'failed', 'failure', 'rejected', 'fired', 'laid off', 'unemployed', 'job loss', 'denied', "didn't get", 'not good enough', 'pride', 'prideful', 'arrogant', 'arrogance', 'ego', 'selfish', 'selfishness', 'self-centered', 'vanity', 'vain'],
+  'seeking-wisdom': ['wisdom', 'guidance', 'direction', 'decision', 'advice', 'what should i do', 'marriage', 'relationship', 'job offer', 'moving', 'college choice', 'big decision', 'retire', 'retirement', 'starting family', 'having kids', 'lying', 'liar', 'dishonest', 'dishonesty', 'gossip', 'gossiping', 'slander', 'cursing', 'swearing', 'bad language', 'words', 'tongue', 'speech'],
 };
 
 function findRelevantMoods(text: string): string[] {
@@ -99,12 +99,14 @@ export function FreeTextInput({ onVersesFound }: FreeTextInputProps) {
   };
 
   const placeholders = [
-    "I'm a college student feeling overwhelmed with finals...",
-    "I just got married and I'm anxious about the future...",
+    "I'm struggling with anger and bitterness...",
+    "I keep falling into the same temptation...",
+    "I feel guilty about things I've done...",
+    "I'm battling envy and jealousy...",
+    "I'm struggling with lust and purity...",
+    "I need help with forgiving someone...",
+    "I'm dealing with pride and selfishness...",
     "I lost my job and don't know what to do next...",
-    "I'm a new parent and feeling exhausted...",
-    "I'm going through a divorce and feel lost...",
-    "I'm retiring soon and seeking direction...",
   ];
 
   const [placeholder] = useState(
@@ -117,7 +119,7 @@ export function FreeTextInput({ onVersesFound }: FreeTextInputProps) {
         <div className="flex items-start gap-3 mb-3">
           <Sparkles className="w-5 h-5 text-muted-foreground mt-1 flex-shrink-0" />
           <p className="text-sm text-muted-foreground">
-            Share what you're going through—your feelings, life stage, or challenges—and we'll find Scripture that speaks to your situation.
+            Share what you're going through—your feelings, struggles, sins, or life challenges—and we'll find Scripture that speaks to your situation.
           </p>
         </div>
 
