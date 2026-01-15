@@ -295,7 +295,7 @@ const Index = () => {
           <div className="mb-6">
             <h1 className="ios-large-title">Connect With Us</h1>
             <p className="text-muted-foreground mt-1">
-              Follow Scriptural Zealous on social media
+              Follow Scriptural Zealous on social media ✝️
             </p>
           </div>
 
