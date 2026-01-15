@@ -91,7 +91,7 @@ const Index = () => {
             <img 
               src={zealousLogo} 
               alt="Zealous" 
-              className="h-80 w-80 mx-auto mb-6"
+              className="h-96 w-96 mx-auto mb-6"
             />
             <h1 className="ios-large-title mb-2">Zealous</h1>
             <p className="text-muted-foreground">
