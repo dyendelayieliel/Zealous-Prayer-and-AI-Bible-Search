@@ -302,7 +302,7 @@ const Index = () => {
           <div className="flex flex-col gap-4">
             {/* YouTube */}
             <a
-              href="https://youtube.com"
+              href="https://youtube.com/@scripturalzeaolous?si=D9KJy_wJAOtk41v5"
               target="_blank"
               rel="noopener noreferrer"
               className="ios-card p-5 flex items-center gap-4 active:scale-[0.98] transition-transform"
