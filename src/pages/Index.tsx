@@ -43,7 +43,7 @@ const Index = () => {
       {activeTab === 'home' && (
         <div className="px-5 pt-16 animate-fade-in">
           {/* Hero */}
-          <div className="text-center mb-10">
+          <div className="text-center mb-6">
             <img 
               src={zealousLogo} 
               alt="Zealous" 
@@ -55,8 +55,19 @@ const Index = () => {
             </p>
           </div>
 
+          {/* Daily Verse */}
+          <div className="ios-card p-5 mb-8">
+            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-3">
+              Today's Encouragement
+            </p>
+            <blockquote className="text-lg leading-relaxed mb-3 italic">
+              "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future."
+            </blockquote>
+            <p className="text-sm text-muted-foreground">— Jeremiah 29:11</p>
+          </div>
+
           {/* Quick Actions */}
-          <div className="space-y-4 mb-10">
+          <div className="space-y-4">
             <button
               onClick={() => {
                 setActiveTab('verses');
@@ -115,16 +126,6 @@ const Index = () => {
             </button>
           </div>
 
-          {/* Daily Verse */}
-          <div className="ios-card p-5">
-            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-3">
-              Today's Encouragement
-            </p>
-            <blockquote className="text-lg leading-relaxed mb-3 italic">
-              "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future."
-            </blockquote>
-            <p className="text-sm text-muted-foreground">— Jeremiah 29:11</p>
-          </div>
         </div>
       )}
 
