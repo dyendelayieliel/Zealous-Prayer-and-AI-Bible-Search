@@ -334,7 +334,7 @@ const Index = () => {
 
             {/* TikTok */}
             <a
-              href="https://tiktok.com"
+              href="https://www.tiktok.com/@scripturalzealous?is_from_webapp=1&sender_device=pc"
               target="_blank"
               rel="noopener noreferrer"
               className="ios-card p-5 flex items-center gap-4 active:scale-[0.98] transition-transform"
