@@ -318,7 +318,7 @@ const Index = () => {
 
             {/* Instagram */}
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/scripturalzealous/"
               target="_blank"
               rel="noopener noreferrer"
               className="ios-card p-5 flex items-center gap-4 active:scale-[0.98] transition-transform"
