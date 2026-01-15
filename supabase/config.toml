@@ -1,1 +1,7 @@
 project_id = "gorouutzgzbgeduxdcxa"
+
+[functions.send-prayer-request]
+verify_jwt = false
+
+[functions.get-daily-verse]
+verify_jwt = false

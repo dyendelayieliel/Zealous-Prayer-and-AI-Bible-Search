@@ -6,6 +6,7 @@ import { IOSPrayerForm } from '@/components/IOSPrayerForm';
 import { FreeTextInput } from '@/components/FreeTextInput';
 import { FreeTextResults } from '@/components/FreeTextResults';
 import { Verse } from '@/data/bibleVerses';
+import { useDailyVerse } from '@/hooks/useDailyVerse';
 import zealousLogo from '@/assets/zealous-logo.png';
 
 type Tab = 'home' | 'verses' | 'prayer';
@@ -17,6 +18,8 @@ const Index = () => {
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [freeTextVerses, setFreeTextVerses] = useState<Verse[]>([]);
   const [userInput, setUserInput] = useState('');
+  
+  const { verse: dailyVerse, isLoading: isVerseLoading, addFeeling } = useDailyVerse();
 
   const handleTabChange = (tab: Tab) => {
     setActiveTab(tab);
@@ -35,6 +38,11 @@ const Index = () => {
     setFreeTextVerses(verses);
     setUserInput(input);
     setVersesMode('freetext-results');
+    
+    // Store the feeling for personalization
+    if (input.trim()) {
+      addFeeling(input.trim());
+    }
   };
 
   return (
@@ -60,10 +68,32 @@ const Index = () => {
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-3">
               Today's Encouragement
             </p>
-            <blockquote className="text-lg leading-relaxed mb-3 italic">
-              "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future."
-            </blockquote>
-            <p className="text-sm text-muted-foreground">— Jeremiah 29:11</p>
+            {isVerseLoading ? (
+              <div className="space-y-3">
+                <div className="h-5 bg-muted rounded animate-pulse"></div>
+                <div className="h-5 bg-muted rounded animate-pulse w-3/4"></div>
+                <div className="h-4 bg-muted rounded animate-pulse w-1/2 mt-4"></div>
+              </div>
+            ) : dailyVerse ? (
+              <>
+                <blockquote className="text-lg leading-relaxed mb-3 italic">
+                  "{dailyVerse.verse}"
+                </blockquote>
+                <p className="text-sm text-muted-foreground mb-3">— {dailyVerse.reference}</p>
+                {dailyVerse.reflection && (
+                  <p className="text-sm text-muted-foreground/80 border-t border-border pt-3">
+                    {dailyVerse.reflection}
+                  </p>
+                )}
+              </>
+            ) : (
+              <>
+                <blockquote className="text-lg leading-relaxed mb-3 italic">
+                  "The Lord is my shepherd; I shall not want. He makes me lie down in green pastures. He leads me beside still waters."
+                </blockquote>
+                <p className="text-sm text-muted-foreground">— Psalm 23:1-2</p>
+              </>
+            )}
           </div>
 
           {/* Quick Actions */}
