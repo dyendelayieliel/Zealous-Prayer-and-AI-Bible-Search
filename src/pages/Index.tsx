@@ -293,7 +293,7 @@ const Index = () => {
       {activeTab === 'social' && (
         <div className="px-5 pt-12 animate-fade-in">
           <div className="mb-6">
-            <h1 className="ios-large-title">Follow for Daily Christian Content</h1>
+            <h1 className="ios-large-title">Daily Christian Content</h1>
             <p className="text-muted-foreground mt-1">
               Follow Scriptural Zealous on social media ✝️
             </p>
