@@ -14,6 +14,49 @@ interface PrayerRequestPayload {
   prayerRequest: string;
 }
 
+// HTML escape function to prevent XSS
+function escapeHtml(text: string): string {
+  const htmlEscapes: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text.replace(/[&<>"']/g, (char) => htmlEscapes[char]);
+}
+
+// Input validation
+function validateInput(payload: any): { valid: boolean; error?: string } {
+  const { name, email, prayerRequest } = payload;
+
+  // Check required fields
+  if (!name || typeof name !== 'string') {
+    return { valid: false, error: 'Name is required' };
+  }
+  if (!prayerRequest || typeof prayerRequest !== 'string') {
+    return { valid: false, error: 'Prayer request is required' };
+  }
+
+  // Check length limits
+  if (name.trim().length === 0 || name.length > 100) {
+    return { valid: false, error: 'Name must be between 1 and 100 characters' };
+  }
+  if (prayerRequest.trim().length === 0 || prayerRequest.length > 2000) {
+    return { valid: false, error: 'Prayer request must be between 1 and 2000 characters' };
+  }
+
+  // Validate email format if provided
+  if (email && typeof email === 'string' && email.trim().length > 0) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email) || email.length > 255) {
+      return { valid: false, error: 'Invalid email format' };
+    }
+  }
+
+  return { valid: true };
+}
+
 const handler = async (req: Request): Promise<Response> => {
   console.log("Received prayer request submission");
 
@@ -23,9 +66,29 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { name, email, prayerRequest }: PrayerRequestPayload = await req.json();
+    const payload = await req.json();
+    
+    // Validate input
+    const validation = validateInput(payload);
+    if (!validation.valid) {
+      console.log("Validation failed:", validation.error);
+      return new Response(
+        JSON.stringify({ error: validation.error }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
 
-    console.log(`Processing prayer request from ${name} (${email})`);
+    const { name, email, prayerRequest }: PrayerRequestPayload = payload;
+
+    // Sanitize inputs for HTML
+    const safeName = escapeHtml(name.trim());
+    const safeEmail = email ? escapeHtml(email.trim()) : 'Not provided';
+    const safePrayerRequest = escapeHtml(prayerRequest.trim());
+
+    console.log(`Processing prayer request from ${safeName}`);
 
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -36,19 +99,19 @@ const handler = async (req: Request): Promise<Response> => {
       body: JSON.stringify({
         from: "Zealous App <onboarding@resend.dev>",
         to: ["scripturalzealous@gmail.com"],
-        subject: `New Prayer Request from ${name}`,
+        subject: `New Prayer Request from ${safeName}`,
         html: `
           <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
             <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">New Prayer Request</h1>
             
             <div style="margin: 20px 0;">
-              <p style="margin: 5px 0;"><strong>Name:</strong> ${name}</p>
-              <p style="margin: 5px 0;"><strong>Email:</strong> ${email}</p>
+              <p style="margin: 5px 0;"><strong>Name:</strong> ${safeName}</p>
+              <p style="margin: 5px 0;"><strong>Email:</strong> ${safeEmail}</p>
             </div>
             
             <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
               <h3 style="margin-top: 0; color: #333;">Prayer Request:</h3>
-              <p style="color: #333; line-height: 1.6; white-space: pre-wrap;">${prayerRequest}</p>
+              <p style="color: #333; line-height: 1.6; white-space: pre-wrap;">${safePrayerRequest}</p>
             </div>
             
             <p style="color: #666; font-size: 12px; margin-top: 30px;">
@@ -62,7 +125,7 @@ const handler = async (req: Request): Promise<Response> => {
     if (!res.ok) {
       const errorData = await res.json();
       console.error("Resend API error:", errorData);
-      throw new Error(errorData.message || "Failed to send email");
+      throw new Error("Failed to send email");
     }
 
     const emailResponse = await res.json();
