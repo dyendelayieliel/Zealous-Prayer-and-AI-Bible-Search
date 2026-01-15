@@ -1,7 +1,7 @@
-import { Home, BookOpen, Mail } from 'lucide-react';
+import { Home, BookOpen, Mail, Share2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-type Tab = 'home' | 'verses' | 'prayer';
+type Tab = 'home' | 'verses' | 'prayer' | 'social';
 
 interface IOSTabBarProps {
   activeTab: Tab;
@@ -13,6 +13,7 @@ export function IOSTabBar({ activeTab, onTabChange }: IOSTabBarProps) {
     { id: 'home' as Tab, label: 'Home', icon: Home },
     { id: 'verses' as Tab, label: 'Scripture', icon: BookOpen },
     { id: 'prayer' as Tab, label: 'Prayer', icon: Mail },
+    { id: 'social' as Tab, label: 'Social', icon: Share2 },
   ];
 
   return (
