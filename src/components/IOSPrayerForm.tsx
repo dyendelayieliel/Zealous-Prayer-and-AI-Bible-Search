@@ -39,6 +39,13 @@ export function IOSPrayerForm() {
         return;
       }
 
+      // Store prayer ID in sessionStorage for anonymous users to track their submissions
+      if (!user && data?.prayerId) {
+        const storedIds = JSON.parse(sessionStorage.getItem('anonymousPrayerIds') || '[]');
+        storedIds.push(data.prayerId);
+        sessionStorage.setItem('anonymousPrayerIds', JSON.stringify(storedIds));
+      }
+
       setIsSubmitted(true);
       toast.success('Your prayer request has been sent');
     } catch (err) {
@@ -58,14 +65,12 @@ export function IOSPrayerForm() {
           <p className="text-muted-foreground mb-6">
             Thank you for sharing your heart with us. We will be praying for you.
           </p>
-          {user && (
-            <p className="text-sm text-muted-foreground mb-4">
-              You can track this request in{' '}
-              <Link to="/my-prayers" className="underline hover:text-foreground">
-                My Prayers
-              </Link>
-            </p>
-          )}
+          <p className="text-sm text-muted-foreground mb-4">
+            You can track this request in{' '}
+            <Link to="/my-prayers" className="underline hover:text-foreground">
+              My Prayers
+            </Link>
+          </p>
           <button
             onClick={() => {
               setIsSubmitted(false);
