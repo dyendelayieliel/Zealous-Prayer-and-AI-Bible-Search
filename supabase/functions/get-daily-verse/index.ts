@@ -51,7 +51,7 @@ Respond ONLY with a JSON object in this exact format (no markdown, no code block
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "google/gemini-2.5-flash-lite",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: `Please select an encouraging Bible verse for today (${date}). Make sure it's different from common verses like Jeremiah 29:11 or Philippians 4:13 - find something that might be new to them.` }

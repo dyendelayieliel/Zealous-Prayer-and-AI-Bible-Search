@@ -74,25 +74,28 @@ export function useDailyVerse() {
 
   useEffect(() => {
     const loadVerse = async () => {
-      setIsLoading(true);
       const today = getTodayDate();
       
       try {
-        // Check if we already have a verse for today
+        // Check if we already have a verse for today - show immediately
         const storedDate = localStorage.getItem(STORAGE_KEY_DATE);
         const storedVerse = localStorage.getItem(STORAGE_KEY_VERSE);
 
         if (storedDate === today && storedVerse) {
-          // Use cached verse for today
+          // Use cached verse for today - instant load
           setVerse(JSON.parse(storedVerse));
           setIsLoading(false);
           return;
         }
 
-        // Fetch new verse for today
+        // Show fallback immediately while fetching
+        setVerse(fallbackVerse);
+        setIsLoading(false);
+
+        // Fetch new verse in background
         const newVerse = await fetchNewVerse();
         
-        // Cache it
+        // Cache and update
         localStorage.setItem(STORAGE_KEY_DATE, today);
         localStorage.setItem(STORAGE_KEY_VERSE, JSON.stringify(newVerse));
         
@@ -100,7 +103,6 @@ export function useDailyVerse() {
       } catch (error) {
         console.error('Error loading verse:', error);
         setVerse(fallbackVerse);
-      } finally {
         setIsLoading(false);
       }
     };
