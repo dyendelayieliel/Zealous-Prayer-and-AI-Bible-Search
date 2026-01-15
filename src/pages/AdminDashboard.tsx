@@ -34,20 +34,16 @@ const AdminDashboard = () => {
   const [notesValue, setNotesValue] = useState('');
   const [savingId, setSavingId] = useState<string | null>(null);
 
-  // Check if user is admin
+  // Check if user is admin using server-side RPC function
   useEffect(() => {
     const checkAdmin = async () => {
       if (!user) return;
       
-      const { data, error } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', user.id)
-        .eq('role', 'admin')
-        .maybeSingle();
+      const { data, error } = await supabase.rpc('is_admin');
       
       if (error) {
-        console.error('Error checking admin status:', error);
+        // Log generic message only - don't expose error details
+        console.error('Admin verification failed');
         setIsAdmin(false);
       } else {
         setIsAdmin(!!data);
@@ -80,7 +76,8 @@ const AdminDashboard = () => {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Error fetching prayers:', error);
+        // Log generic message only - don't expose error details
+        console.error('Failed to load prayer requests');
         toast({
           title: "Error",
           description: "Failed to load prayer requests",
@@ -106,7 +103,7 @@ const AdminDashboard = () => {
       .eq('id', id);
 
     if (error) {
-      console.error('Error updating status:', error);
+      console.error('Failed to update status');
       toast({
         title: "Error",
         description: "Failed to update status",
@@ -132,7 +129,7 @@ const AdminDashboard = () => {
       .eq('id', id);
 
     if (error) {
-      console.error('Error saving notes:', error);
+      console.error('Failed to save notes');
       toast({
         title: "Error",
         description: "Failed to save notes",
@@ -161,7 +158,7 @@ const AdminDashboard = () => {
       .eq('id', id);
 
     if (error) {
-      console.error('Error deleting:', error);
+      console.error('Failed to delete prayer request');
       toast({
         title: "Error",
         description: "Failed to delete prayer request",
