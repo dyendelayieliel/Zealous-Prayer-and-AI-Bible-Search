@@ -8,12 +8,16 @@ import { useToast } from '@/hooks/use-toast';
 interface PrayerRequest {
   id: string;
   name: string;
-  email: string | null;
   prayer_request: string;
   status: string;
   notes: string | null;
   created_at: string;
   user_id: string | null;
+}
+
+interface PrayerContactInfo {
+  prayer_request_id: string;
+  email: string;
 }
 
 const statusOptions = [
@@ -28,6 +32,7 @@ const AdminDashboard = () => {
   const { toast } = useToast();
   
   const [prayers, setPrayers] = useState<PrayerRequest[]>([]);
+  const [contactEmails, setContactEmails] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [editingNotes, setEditingNotes] = useState<string | null>(null);
@@ -62,7 +67,7 @@ const AdminDashboard = () => {
     }
   }, [user, authLoading, navigate]);
 
-  // Fetch all prayer requests (only works for admins due to RLS)
+  // Fetch all prayer requests and contact info (only works for admins due to RLS)
   useEffect(() => {
     const fetchPrayers = async () => {
       if (!user || !isAdmin) {
@@ -70,13 +75,13 @@ const AdminDashboard = () => {
         return;
       }
 
-      const { data, error } = await supabase
+      // Fetch prayer requests
+      const { data: prayerData, error: prayerError } = await supabase
         .from('prayer_requests')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) {
-        // Log generic message only - don't expose error details
+      if (prayerError) {
         console.error('Failed to load prayer requests');
         toast({
           title: "Error",
@@ -84,7 +89,20 @@ const AdminDashboard = () => {
           variant: "destructive"
         });
       } else {
-        setPrayers(data || []);
+        setPrayers(prayerData || []);
+        
+        // Fetch contact emails from restricted table (admin-only access)
+        const { data: contactData, error: contactError } = await supabase
+          .from('prayer_contact_info')
+          .select('prayer_request_id, email');
+        
+        if (!contactError && contactData) {
+          const emailMap: Record<string, string> = {};
+          contactData.forEach((contact: PrayerContactInfo) => {
+            emailMap[contact.prayer_request_id] = contact.email;
+          });
+          setContactEmails(emailMap);
+        }
       }
       setIsLoading(false);
     };
@@ -257,8 +275,8 @@ const AdminDashboard = () => {
                           </span>
                         )}
                       </div>
-                      {prayer.email && (
-                        <p className="text-sm text-muted-foreground">{prayer.email}</p>
+                      {contactEmails[prayer.id] && (
+                        <p className="text-sm text-muted-foreground">{contactEmails[prayer.id]}</p>
                       )}
                       <p className="text-xs text-muted-foreground mt-1">
                         {formatDate(prayer.created_at)}

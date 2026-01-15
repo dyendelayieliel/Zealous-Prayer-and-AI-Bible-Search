@@ -14,10 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      prayer_contact_info: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          prayer_request_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          prayer_request_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          prayer_request_id?: string
+        }
+        Relationships: []
+      }
       prayer_requests: {
         Row: {
           created_at: string
-          email: string | null
           id: string
           name: string
           notes: string | null
@@ -28,7 +48,6 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          email?: string | null
           id?: string
           name: string
           notes?: string | null
@@ -39,7 +58,6 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          email?: string | null
           id?: string
           name?: string
           notes?: string | null
@@ -76,6 +94,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_prayer_contact_email: { Args: { prayer_id: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

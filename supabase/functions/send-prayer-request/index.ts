@@ -142,11 +142,11 @@ const handler = async (req: Request): Promise<Response> => {
     
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+    // Insert prayer request (without email - email goes to separate restricted table)
     const { data: dbData, error: dbError } = await supabase
       .from('prayer_requests')
       .insert({
         name: name.trim(),
-        email: email?.trim() || null,
         prayer_request: prayerRequest.trim(),
         status: 'pending',
         user_id: userId || null
@@ -159,6 +159,22 @@ const handler = async (req: Request): Promise<Response> => {
       // Continue with email even if DB fails - don't block the user
     } else {
       console.log("Prayer request stored with ID:", dbData?.id);
+      
+      // Store email in separate restricted table if provided
+      if (email?.trim() && dbData?.id) {
+        const { error: contactError } = await supabase
+          .from('prayer_contact_info')
+          .insert({
+            prayer_request_id: dbData.id,
+            email: email.trim()
+          });
+        
+        if (contactError) {
+          console.error("Failed to store contact info");
+        } else {
+          console.log("Contact info stored separately");
+        }
+      }
     }
 
     // Send email notification
