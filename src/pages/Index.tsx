@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { IOSTabBar } from '@/components/IOSTabBar';
 import { IOSMoodSelector } from '@/components/IOSMoodSelector';
 import { IOSVerseDisplay } from '@/components/IOSVerseDisplay';
@@ -7,6 +8,8 @@ import { FreeTextInput } from '@/components/FreeTextInput';
 import { FreeTextResults } from '@/components/FreeTextResults';
 import { Verse } from '@/data/bibleVerses';
 import { useDailyVerse } from '@/hooks/useDailyVerse';
+import { useAuth } from '@/hooks/useAuth';
+import { User, LogOut } from 'lucide-react';
 import zealousLogo from '@/assets/zealous-logo.png';
 
 type Tab = 'home' | 'verses' | 'prayer';
@@ -20,6 +23,7 @@ const Index = () => {
   const [userInput, setUserInput] = useState('');
   
   const { verse: dailyVerse, isLoading: isVerseLoading, addFeeling } = useDailyVerse();
+  const { user, signOut, isLoading: isAuthLoading } = useAuth();
 
   const handleTabChange = (tab: Tab) => {
     setActiveTab(tab);
@@ -49,7 +53,39 @@ const Index = () => {
     <div className="min-h-screen bg-background text-foreground pb-24">
       {/* Home Tab */}
       {activeTab === 'home' && (
-        <div className="px-5 pt-16 animate-fade-in">
+        <div className="px-5 pt-12 animate-fade-in">
+          {/* User header */}
+          <div className="flex justify-end mb-4">
+            {!isAuthLoading && (
+              user ? (
+                <div className="flex items-center gap-2">
+                  <Link 
+                    to="/my-prayers"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    My Prayers
+                  </Link>
+                  <span className="text-muted-foreground">·</span>
+                  <button
+                    onClick={signOut}
+                    className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <LogOut className="w-3 h-3" />
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <Link 
+                  to="/auth"
+                  className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <User className="w-4 h-4" />
+                  Sign In
+                </Link>
+              )
+            )}
+          </div>
+
           {/* Hero */}
           <div className="text-center mb-6">
             <img 

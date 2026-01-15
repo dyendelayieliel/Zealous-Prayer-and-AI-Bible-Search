@@ -13,6 +13,7 @@ interface PrayerRequestPayload {
   name: string;
   email: string;
   prayerRequest: string;
+  userId?: string | null;
 }
 
 // HTML escape function to prevent XSS
@@ -82,16 +83,16 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    const { name, email, prayerRequest }: PrayerRequestPayload = payload;
+    const { name, email, prayerRequest, userId }: PrayerRequestPayload = payload;
 
     // Sanitize inputs for HTML
     const safeName = escapeHtml(name.trim());
     const safeEmail = email ? escapeHtml(email.trim()) : 'Not provided';
     const safePrayerRequest = escapeHtml(prayerRequest.trim());
 
-    console.log(`Processing prayer request from ${safeName}`);
+    console.log(`Processing prayer request from ${safeName}${userId ? ` (user: ${userId})` : ' (anonymous)'}`);
 
-    // Store prayer request in database using service role for insert
+    // Store prayer request in database
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
     
@@ -103,7 +104,8 @@ const handler = async (req: Request): Promise<Response> => {
         name: name.trim(),
         email: email?.trim() || null,
         prayer_request: prayerRequest.trim(),
-        status: 'pending'
+        status: 'pending',
+        user_id: userId || null
       })
       .select('id')
       .single();

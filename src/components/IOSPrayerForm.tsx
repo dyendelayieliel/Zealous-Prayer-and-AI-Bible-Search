@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Send, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 export function IOSPrayerForm() {
+  const { user } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [request, setRequest] = useState('');
@@ -26,6 +29,7 @@ export function IOSPrayerForm() {
           name: name.trim(),
           email: email.trim(),
           prayerRequest: request.trim(),
+          userId: user?.id || null, // Link to user if authenticated
         },
       });
 
@@ -54,6 +58,14 @@ export function IOSPrayerForm() {
           <p className="text-muted-foreground mb-6">
             Thank you for sharing your heart with us. We will be praying for you.
           </p>
+          {user && (
+            <p className="text-sm text-muted-foreground mb-4">
+              You can track this request in{' '}
+              <Link to="/my-prayers" className="underline hover:text-foreground">
+                My Prayers
+              </Link>
+            </p>
+          )}
           <button
             onClick={() => {
               setIsSubmitted(false);
