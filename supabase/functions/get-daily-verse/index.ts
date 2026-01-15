@@ -10,12 +10,56 @@ interface DailyVerseRequest {
   date: string;
 }
 
+// Simple in-memory rate limiting (resets on function cold start)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+
+function checkRateLimit(key: string, maxRequests: number, windowSeconds: number): { allowed: boolean; remaining: number } {
+  const now = Date.now();
+  const windowMs = windowSeconds * 1000;
+  
+  const record = rateLimitMap.get(key);
+  
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(key, { count: 1, resetTime: now + windowMs });
+    return { allowed: true, remaining: maxRequests - 1 };
+  }
+  
+  if (record.count >= maxRequests) {
+    return { allowed: false, remaining: 0 };
+  }
+  
+  record.count++;
+  return { allowed: true, remaining: maxRequests - record.count };
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    // Rate limiting: 10 requests per minute per IP
+    const clientIP = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
+                     req.headers.get('x-real-ip') || 
+                     'unknown';
+    
+    const rateLimit = checkRateLimit(clientIP, 10, 60);
+    
+    if (!rateLimit.allowed) {
+      console.log(`Rate limit exceeded for IP: ${clientIP}`);
+      return new Response(
+        JSON.stringify({ error: "Too many requests. Please wait a moment before trying again." }),
+        {
+          status: 429,
+          headers: { 
+            ...corsHeaders, 
+            "Content-Type": "application/json",
+            "Retry-After": "60"
+          },
+        }
+      );
+    }
+
     const { userFeelings, date }: DailyVerseRequest = await req.json();
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
@@ -61,7 +105,7 @@ Respond ONLY with a JSON object in this exact format (no markdown, no code block
 
     if (!response.ok) {
       if (response.status === 429) {
-        console.error("Rate limit exceeded");
+        console.error("AI rate limit exceeded");
         return new Response(
           JSON.stringify({ error: "Rate limit exceeded. Please try again later." }),
           { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -74,8 +118,7 @@ Respond ONLY with a JSON object in this exact format (no markdown, no code block
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-      const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
+      console.error("AI gateway error:", response.status);
       throw new Error("Failed to get verse from AI");
     }
 
@@ -86,7 +129,7 @@ Respond ONLY with a JSON object in this exact format (no markdown, no code block
       throw new Error("No content in AI response");
     }
 
-    console.log("AI response:", content);
+    console.log("AI response received");
 
     // Parse the JSON response
     let verseData;
@@ -95,7 +138,7 @@ Respond ONLY with a JSON object in this exact format (no markdown, no code block
       const cleanContent = content.replace(/```json\n?|\n?```/g, '').trim();
       verseData = JSON.parse(cleanContent);
     } catch (parseError) {
-      console.error("Failed to parse AI response:", parseError);
+      console.error("Failed to parse AI response");
       // Fallback verse if parsing fails
       verseData = {
         verse: "The Lord is my shepherd; I shall not want. He makes me lie down in green pastures. He leads me beside still waters. He restores my soul.",
@@ -110,7 +153,7 @@ Respond ONLY with a JSON object in this exact format (no markdown, no code block
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("Error getting daily verse:", error);
+    console.error("Error getting daily verse");
     
     // Return a fallback verse instead of an error
     const fallbackVerse = {

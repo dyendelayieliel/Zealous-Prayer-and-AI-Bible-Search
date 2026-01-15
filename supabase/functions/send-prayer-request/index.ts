@@ -16,6 +16,28 @@ interface PrayerRequestPayload {
   userId?: string | null;
 }
 
+// Simple in-memory rate limiting (resets on function cold start)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+
+function checkRateLimit(key: string, maxRequests: number, windowSeconds: number): { allowed: boolean; remaining: number } {
+  const now = Date.now();
+  const windowMs = windowSeconds * 1000;
+  
+  const record = rateLimitMap.get(key);
+  
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(key, { count: 1, resetTime: now + windowMs });
+    return { allowed: true, remaining: maxRequests - 1 };
+  }
+  
+  if (record.count >= maxRequests) {
+    return { allowed: false, remaining: 0 };
+  }
+  
+  record.count++;
+  return { allowed: true, remaining: maxRequests - record.count };
+}
+
 // HTML escape function to prevent XSS
 function escapeHtml(text: string): string {
   const htmlEscapes: Record<string, string> = {
@@ -68,6 +90,28 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // Rate limiting: 5 requests per minute per IP
+    const clientIP = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
+                     req.headers.get('x-real-ip') || 
+                     'unknown';
+    
+    const rateLimit = checkRateLimit(clientIP, 5, 60);
+    
+    if (!rateLimit.allowed) {
+      console.log(`Rate limit exceeded for IP: ${clientIP}`);
+      return new Response(
+        JSON.stringify({ error: "Too many requests. Please wait a moment before trying again." }),
+        {
+          status: 429,
+          headers: { 
+            "Content-Type": "application/json", 
+            "Retry-After": "60",
+            ...corsHeaders 
+          },
+        }
+      );
+    }
+
     const payload = await req.json();
     
     // Validate input
@@ -111,7 +155,7 @@ const handler = async (req: Request): Promise<Response> => {
       .single();
 
     if (dbError) {
-      console.error("Database error:", dbError);
+      console.error("Database error occurred");
       // Continue with email even if DB fails - don't block the user
     } else {
       console.log("Prayer request stored with ID:", dbData?.id);
@@ -152,13 +196,12 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     if (!res.ok) {
-      const errorData = await res.json();
-      console.error("Resend API error:", errorData);
+      console.error("Email sending failed");
       throw new Error("Failed to send email");
     }
 
     const emailResponse = await res.json();
-    console.log("Email sent successfully:", emailResponse);
+    console.log("Email sent successfully");
 
     return new Response(JSON.stringify({ success: true, data: emailResponse }), {
       status: 200,
@@ -168,7 +211,7 @@ const handler = async (req: Request): Promise<Response> => {
       },
     });
   } catch (error: any) {
-    console.error("Error sending prayer request email:", error);
+    console.error("Error processing prayer request");
     
     // Return generic error to client - don't expose internal error details
     return new Response(

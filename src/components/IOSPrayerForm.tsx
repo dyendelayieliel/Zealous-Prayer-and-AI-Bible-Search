@@ -34,7 +34,7 @@ export function IOSPrayerForm() {
       });
 
       if (error) {
-        console.error('Error sending prayer request:', error);
+        console.error('Prayer request submission failed');
         toast.error('Failed to send prayer request. Please try again.');
         return;
       }
@@ -42,7 +42,7 @@ export function IOSPrayerForm() {
       setIsSubmitted(true);
       toast.success('Your prayer request has been sent');
     } catch (err) {
-      console.error('Error:', err);
+      console.error('Prayer request submission failed');
       toast.error('Failed to send prayer request. Please try again.');
     } finally {
       setIsSubmitting(false);
