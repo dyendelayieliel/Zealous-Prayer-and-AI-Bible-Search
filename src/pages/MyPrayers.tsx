@@ -25,33 +25,57 @@ const MyPrayers = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/auth');
-    }
-  }, [user, authLoading, navigate]);
-
-  useEffect(() => {
     const fetchPrayers = async () => {
-      if (!user) return;
+      const allPrayers: PrayerRequest[] = [];
 
-      const { data, error } = await supabase
-        .from('prayer_requests')
-        .select('id, name, prayer_request, status, created_at')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+      // Fetch authenticated user's prayers
+      if (user) {
+        const { data, error } = await supabase
+          .from('prayer_requests')
+          .select('id, name, prayer_request, status, created_at')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error('Failed to load prayers');
-      } else {
-        setPrayers(data || []);
+        if (error) {
+          console.error('Failed to load prayers');
+        } else if (data) {
+          allPrayers.push(...data);
+        }
       }
+
+      // Also fetch anonymous prayers from session storage
+      const storedIds = JSON.parse(sessionStorage.getItem('anonymousPrayerIds') || '[]') as string[];
+      
+      if (storedIds.length > 0) {
+        const { data: anonymousPrayers, error: anonError } = await supabase
+          .from('prayer_requests')
+          .select('id, name, prayer_request, status, created_at')
+          .in('id', storedIds)
+          .order('created_at', { ascending: false });
+
+        if (anonError) {
+          console.error('Failed to load anonymous prayers');
+        } else if (anonymousPrayers) {
+          // Add anonymous prayers that aren't already in the list
+          const existingIds = new Set(allPrayers.map(p => p.id));
+          for (const prayer of anonymousPrayers) {
+            if (!existingIds.has(prayer.id)) {
+              allPrayers.push(prayer);
+            }
+          }
+        }
+      }
+
+      // Sort all prayers by date
+      allPrayers.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      setPrayers(allPrayers);
       setIsLoading(false);
     };
 
-    if (user) {
+    if (!authLoading) {
       fetchPrayers();
     }
-  }, [user]);
+  }, [user, authLoading]);
 
   if (authLoading || isLoading) {
     return (

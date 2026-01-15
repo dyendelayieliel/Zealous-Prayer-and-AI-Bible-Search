@@ -219,7 +219,7 @@ const handler = async (req: Request): Promise<Response> => {
     const emailResponse = await res.json();
     console.log("Email sent successfully");
 
-    return new Response(JSON.stringify({ success: true, data: emailResponse }), {
+    return new Response(JSON.stringify({ success: true, data: emailResponse, prayerId: dbData?.id || null }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
