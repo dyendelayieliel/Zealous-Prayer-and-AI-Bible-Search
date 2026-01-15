@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -90,6 +91,31 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log(`Processing prayer request from ${safeName}`);
 
+    // Store prayer request in database using service role for insert
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+    const { data: dbData, error: dbError } = await supabase
+      .from('prayer_requests')
+      .insert({
+        name: name.trim(),
+        email: email?.trim() || null,
+        prayer_request: prayerRequest.trim(),
+        status: 'pending'
+      })
+      .select('id')
+      .single();
+
+    if (dbError) {
+      console.error("Database error:", dbError);
+      // Continue with email even if DB fails - don't block the user
+    } else {
+      console.log("Prayer request stored with ID:", dbData?.id);
+    }
+
+    // Send email notification
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -107,6 +133,7 @@ const handler = async (req: Request): Promise<Response> => {
             <div style="margin: 20px 0;">
               <p style="margin: 5px 0;"><strong>Name:</strong> ${safeName}</p>
               <p style="margin: 5px 0;"><strong>Email:</strong> ${safeEmail}</p>
+              ${dbData?.id ? `<p style="margin: 5px 0;"><strong>Request ID:</strong> ${dbData.id}</p>` : ''}
             </div>
             
             <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
