@@ -24,12 +24,12 @@ export function IOSPrayerForm() {
     setIsSubmitting(true);
     
     try {
-      const { data, error } = await supabase.functions.invoke('send-prayer-request', {
+      const { error } = await supabase.functions.invoke('send-prayer-request', {
         body: {
           name: name.trim(),
           email: email.trim(),
           prayerRequest: request.trim(),
-          userId: user?.id || null, // Link to user if authenticated
+          // userId is now validated server-side from JWT, not client-provided
         },
       });
 
@@ -37,13 +37,6 @@ export function IOSPrayerForm() {
         console.error('Prayer request submission failed');
         toast.error('Failed to send prayer request. Please try again.');
         return;
-      }
-
-      // Store prayer ID in sessionStorage for anonymous users to track their submissions
-      if (!user && data?.prayerId) {
-        const storedIds = JSON.parse(sessionStorage.getItem('anonymousPrayerIds') || '[]');
-        storedIds.push(data.prayerId);
-        sessionStorage.setItem('anonymousPrayerIds', JSON.stringify(storedIds));
       }
 
       setIsSubmitted(true);
@@ -65,12 +58,21 @@ export function IOSPrayerForm() {
           <p className="text-muted-foreground mb-6">
             Thank you for sharing your heart with us. We will be praying for you.
           </p>
-          <p className="text-sm text-muted-foreground mb-4">
-            You can track this request in{' '}
-            <Link to="/my-prayers" className="underline hover:text-foreground">
-              My Prayers
-            </Link>
-          </p>
+          {user ? (
+            <p className="text-sm text-muted-foreground mb-4">
+              You can track this request in{' '}
+              <Link to="/my-prayers" className="underline hover:text-foreground">
+                My Prayers
+              </Link>
+            </p>
+          ) : (
+            <p className="text-sm text-muted-foreground mb-4">
+              <Link to="/auth" className="underline hover:text-foreground">
+                Sign in
+              </Link>{' '}
+              to track your prayer requests.
+            </p>
+          )}
           <button
             onClick={() => {
               setIsSubmitted(false);
