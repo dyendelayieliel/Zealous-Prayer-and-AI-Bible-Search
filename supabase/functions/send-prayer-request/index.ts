@@ -13,7 +13,6 @@ interface PrayerRequestPayload {
   name: string;
   email: string;
   prayerRequest: string;
-  userId?: string | null;
 }
 
 // Simple in-memory rate limiting (resets on function cold start)
@@ -81,6 +80,39 @@ function validateInput(payload: any): { valid: boolean; error?: string } {
   return { valid: true };
 }
 
+// Extract and validate user from JWT token
+async function getAuthenticatedUserId(req: Request): Promise<string | null> {
+  const authHeader = req.headers.get('authorization');
+  
+  if (!authHeader?.startsWith('Bearer ')) {
+    return null;
+  }
+
+  try {
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    
+    // Create client with the user's auth header to validate their JWT
+    const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data, error } = await supabaseClient.auth.getClaims(token);
+    
+    if (error || !data?.claims?.sub) {
+      console.log("JWT validation failed or no user ID found");
+      return null;
+    }
+
+    console.log("Authenticated user ID from JWT:", data.claims.sub);
+    return data.claims.sub;
+  } catch (e) {
+    console.error("Error validating JWT:", e);
+    return null;
+  }
+}
+
 const handler = async (req: Request): Promise<Response> => {
   console.log("Received prayer request submission");
 
@@ -112,6 +144,9 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    // SECURITY: Validate user from JWT instead of trusting client-provided userId
+    const authenticatedUserId = await getAuthenticatedUserId(req);
+
     const payload = await req.json();
     
     // Validate input
@@ -127,14 +162,14 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    const { name, email, prayerRequest, userId }: PrayerRequestPayload = payload;
+    const { name, email, prayerRequest }: PrayerRequestPayload = payload;
 
     // Sanitize inputs for HTML
     const safeName = escapeHtml(name.trim());
     const safeEmail = email ? escapeHtml(email.trim()) : 'Not provided';
     const safePrayerRequest = escapeHtml(prayerRequest.trim());
 
-    console.log(`Processing prayer request from ${safeName}${userId ? ` (user: ${userId})` : ' (anonymous)'}`);
+    console.log(`Processing prayer request from ${safeName}${authenticatedUserId ? ` (user: ${authenticatedUserId})` : ' (anonymous)'}`);
 
     // Store prayer request in database using service role to bypass RLS
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -142,14 +177,14 @@ const handler = async (req: Request): Promise<Response> => {
     
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Insert prayer request (without email - email goes to separate restricted table)
+    // Insert prayer request using server-validated user ID (not client-provided)
     const { data: dbData, error: dbError } = await supabase
       .from('prayer_requests')
       .insert({
         name: name.trim(),
         prayer_request: prayerRequest.trim(),
         status: 'pending',
-        user_id: userId || null
+        user_id: authenticatedUserId // Server-validated, not client-provided
       })
       .select('id')
       .single();
@@ -219,7 +254,7 @@ const handler = async (req: Request): Promise<Response> => {
     const emailResponse = await res.json();
     console.log("Email sent successfully");
 
-    return new Response(JSON.stringify({ success: true, data: emailResponse, prayerId: dbData?.id || null }), {
+    return new Response(JSON.stringify({ success: true, data: emailResponse }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
